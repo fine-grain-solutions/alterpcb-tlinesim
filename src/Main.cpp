@@ -20,6 +20,7 @@ along with this AlterPCB.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ApplicationDirs.h"
 #include "Basics.h"
+#include "CommandLine.h"
 #include "Icons.h"
 #include "MainWindow.h"
 #include "StringRegistry.h"
@@ -30,6 +31,16 @@ int main(int argc, char* argv[]) {
 	// create singletons
 	StringRegistry string_registry;
 	UNUSED(string_registry);
+
+	// with arguments, run headlessly without creating any GUI objects
+	if(argc > 1) {
+		QCoreApplication app(argc, argv);
+		QCoreApplication::setOrganizationName("AlterPCB");
+		QCoreApplication::setApplicationName("AlterPCB Transmission Line Simulator");
+		InitApplicationDirs();
+		RegisterTLineTypes();
+		return RunCommandLine(argc, argv);
+	}
 
 	// create application
 	QApplication app(argc, argv);

@@ -26,3 +26,7 @@ build-*/
 src/alterpcb-tlinesim
 
 private-*
+
+# nix build output
+result
+result-*

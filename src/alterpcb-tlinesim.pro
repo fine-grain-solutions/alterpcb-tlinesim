@@ -32,8 +32,8 @@ QMAKE_CXXFLAGS += -std=c++11 -Wconversion -Wsign-conversion -Wfloat-conversion
 QMAKE_CXXFLAGS_RELEASE -= -O2 -g
 QMAKE_CXXFLAGS_RELEASE += -O3 -DNDEBUG
 
-INCLUDEPATH += common gui simulation
-DEPENDPATH += common gui simulation
+INCLUDEPATH += cli common gui simulation
+DEPENDPATH += cli common gui simulation
 
 unix {
 	CONFIG += link_pkgconfig
@@ -43,6 +43,7 @@ unix {
 ########## Warning: Everything below this line is auto-generated and will be overwritten! ##########
 
 HEADERS += \
+	cli/CommandLine.h \
 	common/Basics.h \
 	common/Color.h \
 	common/ColorMap.h \
@@ -82,6 +83,7 @@ HEADERS += \
 
 SOURCES += \
 	Main.cpp \
+	cli/CommandLine.cpp \
 	common/Color.cpp \
 	common/ColorMap.cpp \
 	common/Decimal.cpp \

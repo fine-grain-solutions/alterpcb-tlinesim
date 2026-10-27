@@ -78,8 +78,26 @@
       };
     });
 
+    # `nix flake check` runs a headless simulation inside the build sandbox,
+    # which has no display, to verify the CLI works without a GUI.
+    checks = forAllSystems (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+      tlinesim = self.packages.${system}.default;
+    in {
+      headless = pkgs.runCommand "alterpcb-tlinesim-headless-check" {} ''
+        ${tlinesim}/bin/alterpcb-tlinesim --list-types | grep -q microstrip-single
+        ${tlinesim}/bin/alterpcb-tlinesim -t microstrip-single -m very-low \
+          -p track-width=0.3 -f 1 -o result.tsv
+        cat result.tsv
+        test "$(wc -l < result.tsv)" -eq 2
+        touch "$out"
+      '';
+    });
+
     # An unqualified `nix run` selects this app definition. Its program path
     # references the package above, so Nix builds it if needed and runs it.
+    # Without arguments it starts the GUI; with arguments it runs headlessly,
+    # e.g. `nix run . -- --help`.
     apps = forAllSystems (system: {
       default = {
         type = "app";
