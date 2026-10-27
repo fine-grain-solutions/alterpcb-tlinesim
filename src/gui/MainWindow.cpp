@@ -36,27 +36,6 @@ along with this AlterPCB.  If not, see <http://www.gnu.org/licenses/>.
 
 const QString MainWindow::WINDOW_CAPTION = "AlterPCB Transmission Line Simulator";
 
-static real_t FloatFromVData(const VData &data) {
-	if(data.GetType() == VDATA_INT)
-		return (real_t) data.AsInt(); // implicit int to float conversion
-	if(data.GetType() == VDATA_FLOAT)
-		return FloatUnscale(data.AsFloat());
-	throw std::runtime_error(MakeString("Expected float, got ", EnumToString(data.GetType()), " instead."));
-}
-
-static real_t FloatFromString(const std::string &str) {
-	return FloatFromVData(Json::FromString(str));
-}
-
-static void MakeSweep(std::vector<real_t> &results, real_t min, real_t max, real_t step) {
-	size_t num = (size_t) std::max<ptrdiff_t>(rintp(std::max(0.0, max - min) / step + 0.5 + 1e-12), 1);
-	results.clear();
-	results.resize(num);
-	for(size_t i = 0; i < num; ++i) {
-		results[i] = min + step * (real_t) i;
-	}
-}
-
 MainWindow::MainWindow() {
 
 	m_material_database.reset(new MaterialDatabase());

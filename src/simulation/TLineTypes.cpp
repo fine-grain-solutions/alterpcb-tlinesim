@@ -20,7 +20,9 @@ along with this AlterPCB.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "TLineTypes.h"
 
+#include "Json.h"
 #include "MaterialDatabase.h"
+#include "MiscMath.h"
 
 // TODO: remove
 #include <iostream>
@@ -144,4 +146,25 @@ void TLineSolveModes(TLineContext &context, const Eigen::MatrixXr &modes) {
 	// cleanup
 	context.m_output_mesh->Cleanup();
 
+}
+
+real_t FloatFromVData(const VData &data) {
+	if(data.GetType() == VDATA_INT)
+		return (real_t) data.AsInt(); // implicit int to float conversion
+	if(data.GetType() == VDATA_FLOAT)
+		return FloatUnscale(data.AsFloat());
+	throw std::runtime_error(MakeString("Expected float, got ", EnumToString(data.GetType()), " instead."));
+}
+
+real_t FloatFromString(const std::string &str) {
+	return FloatFromVData(Json::FromString(str));
+}
+
+void MakeSweep(std::vector<real_t> &results, real_t min, real_t max, real_t step) {
+	size_t num = (size_t) std::max<ptrdiff_t>(rintp(std::max(0.0, max - min) / step + 0.5 + 1e-12), 1);
+	results.clear();
+	results.resize(num);
+	for(size_t i = 0; i < num; ++i) {
+		results[i] = min + step * (real_t) i;
+	}
 }

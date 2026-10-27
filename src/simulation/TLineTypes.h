@@ -90,3 +90,7 @@ std::string CanonicalName(const std::string& name);
 const MaterialConductor* FindConductor(VDataDictReader &root, const char *key, MaterialDatabase *material_database);
 const MaterialDielectric* FindDielectric(VDataDictReader &root, const char *key, MaterialDatabase *material_database);
 void TLineSolveModes(TLineContext &context, const Eigen::MatrixXr &modes);
+
+real_t FloatFromVData(const VData &data);
+real_t FloatFromString(const std::string &str);
+void MakeSweep(std::vector<real_t> &results, real_t min, real_t max, real_t step);

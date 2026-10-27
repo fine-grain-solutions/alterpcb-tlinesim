@@ -40,3 +40,24 @@ Compiling and installing
 ------------------------
 
 Compiling should be done with Qt Creator or 'qmake' as usual. Right now installation is not supported yet.
+
+Command line usage
+------------------
+
+Running the program without arguments starts the GUI. With arguments, it runs headlessly (no display required) and writes results as tab-separated values to standard output or to a file given with `--output`:
+
+	alterpcb-tlinesim --list-types
+	alterpcb-tlinesim --type microstrip-differential --list-parameters
+	alterpcb-tlinesim -t microstrip-single -p track-width=0.3 -p substrate-thickness=0.2 -f 2.4
+	alterpcb-tlinesim -t microstrip-single --frequency-sweep 0.1:10:0.1 -o sweep.tsv
+	alterpcb-tlinesim -t microstrip-single --parameter-sweep track-width=0.1:1:0.05
+	alterpcb-tlinesim -t microstrip-differential --tune track-width --target differential-impedance=100
+
+Run `alterpcb-tlinesim --help` for all options.
+
+Nix
+---
+
+	nix run                  # start the GUI
+	nix run . -- --help      # headless mode: pass arguments after '--'
+	nix flake check          # build and run a headless simulation test
